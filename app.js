@@ -1,6 +1,5 @@
 "use strict";
 
-
 let puzzle = new Flow_Puzzle();
 
 let is_drawing = false;
