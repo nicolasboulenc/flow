@@ -82,7 +82,7 @@ function init() {
 	}
 
 	for(let i=0; i<9; i++) {
-		sounds.load(`sounds/blip-${i}.wav`)
+		sounds.load(`/flow/sounds/blip-${i}.wav`)
 	}
 }
 
