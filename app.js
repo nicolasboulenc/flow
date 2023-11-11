@@ -20,6 +20,8 @@ let grid_h = 0;
 
 const sounds = new Sounds()
 const theme = THEMES[1]
+const prefix = "/flow"	// "" for local "/flow" for github pages
+
 
 init();
 
@@ -82,7 +84,7 @@ function init() {
 	}
 
 	for(let i=0; i<9; i++) {
-		sounds.load(`/flow/sounds/blip-${i}.wav`)
+		sounds.load(`${prefix}/sounds/blip-${i}.wav`)
 	}
 }
 
@@ -303,7 +305,7 @@ function canvas_onpointerup(evt) {
 
 	const new_flows = puzzle.get_flows()
 	if(new_flows.length > curr_flows.length) {
-		sounds.play(`blip-${new_flows.length-1}.wav`, 1);
+		sounds.play(`${prefix}/sounds/blip-${new_flows.length-1}.wav`, 1);
 	}
 	curr_flows = new_flows;
 	window.requestAnimationFrame(draw)
@@ -493,7 +495,7 @@ function game_reset_onclick() {
 
 function puzzle_item_onclick(evt) {
 
-	sounds.play("blip-3.wav", 1)
+	sounds.play(`${prefix}/sounds/blip-3.wav`, 1)
 
 	const puzzles = document.getElementById("main");
 	puzzles.style.display = "none";
