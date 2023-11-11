@@ -149,7 +149,7 @@ function draw() {
 		while(cell !== null) {
 			// draw rect
 			ctx.fillRect(cell.x * cell_w, cell.y * cell_h, cell_w, cell_h)
-			cell = puzzle.next_cell(cell, "exit");
+			cell = puzzle.next_cell(cell);
 		}
 	}
 
@@ -203,7 +203,7 @@ function draw() {
 				ctx.fill();
 			}
 
-			if(cell.exit !== "") {
+			if(cell.exit !== DIR.none) {
 				ctx.strokeStyle = theme.colors[cell.color_index];
 				ctx.beginPath();
 				const cx = cell.x * cell_w + cell_half_w;
@@ -267,32 +267,32 @@ function canvas_onpointerdown(evt) {
 		is_drawing = true;
 	}
 	// if continuing existing path
-	else if(puzzle.grid[i].color_index !== -1 && puzzle.grid[i].is_dot === false && puzzle.grid[i].exit === "") {
+	else if(puzzle.grid[i].color_index !== -1 && puzzle.grid[i].is_dot === false && puzzle.grid[i].exit === DIR.none) {
 		curr_cell = puzzle.grid[i];
 		is_drawing = true;
 	}
 
 	// if click on a dot remove all previous connections to that point
-	if(curr_cell !== null && curr_cell.is_dot === true && (curr_cell.exit !== "" || curr_cell.entry !== "")) {
+	if(curr_cell !== null && curr_cell.is_dot === true && (curr_cell.exit !== DIR.none || curr_cell.entry !== DIR.none)) {
 
 		window.requestAnimationFrame(draw);
 
 		let which_way = "exit";
-		if(curr_cell.exit === "") {
+		if(curr_cell.exit === DIR.none) {
 			which_way = "entry";
 		}
 
 		let search_cell = puzzle.next_cell(curr_cell, which_way);
-		curr_cell.entry = "";
-		curr_cell.exit = "";
+		curr_cell.entry = DIR.none;
+		curr_cell.exit = DIR.none;
 
 		while(search_cell !== null) {
 			if(search_cell.is_dot === false) {
 				search_cell.color_index = -1;
 			}
 			let c = puzzle.next_cell(search_cell, which_way);
-			search_cell.entry = "";
-			search_cell.exit = "";
+			search_cell.entry = DIR.none;
+			search_cell.exit = DIR.none;
 			search_cell = c;
 		}
 	}
@@ -343,17 +343,17 @@ function canvas_onpointermove(evt) {
 
 		// backtracking on the same path
 		if(new_cell.color_index === curr_cell.color_index && (
-			(new_cell.exit === "n" && curr_cell.entry === "s") ||
-			(new_cell.exit === "s" && curr_cell.entry === "n") ||
-			(new_cell.exit === "e" && curr_cell.entry === "w") ||
-			(new_cell.exit === "w" && curr_cell.entry === "e")
+			(new_cell.exit === DIR.N && curr_cell.entry === DIR.S) ||
+			(new_cell.exit === DIR.S && curr_cell.entry === DIR.N) ||
+			(new_cell.exit === DIR.E && curr_cell.entry === DIR.W) ||
+			(new_cell.exit === DIR.W && curr_cell.entry === DIR.E)
 		)) {
 			console.log("Back tracking");
 			if(curr_cell.is_dot === false) {
 				curr_cell.color_index = -1;
 			}
-			curr_cell.entry = "";
-			new_cell.exit = "";
+			curr_cell.entry = DIR.none;
+			new_cell.exit = DIR.none;
 			curr_cell = new_cell;
 			window.requestAnimationFrame(draw);
 			return;
@@ -361,7 +361,7 @@ function canvas_onpointermove(evt) {
 
 		// if same color and not backtracking, does not allow to connect to a cell which already has both (an entry and exit) or (is a dot and exit)
 		if(new_cell.color_index === curr_cell.color_index) {
-			if( (new_cell.entry !== "" && new_cell.exit !== "") || (new_cell.is_dot === true && new_cell.exit !== "") ) {
+			if( (new_cell.entry !== DIR.none && new_cell.exit !== DIR.none) || (new_cell.is_dot === true && new_cell.exit !== DIR.none) ) {
 				console.log("Trying to loop!");
 				is_drawing = false;
 				return;
@@ -387,8 +387,8 @@ function canvas_onpointermove(evt) {
 				fix_direction = false;
 				for(let cell of cells) {
 					cell.color_index = -1;
-					cell.entry = "";
-					cell.exit = "";
+					cell.entry = DIR.none;
+					cell.exit = DIR.none;
 				}
 			}
 
@@ -411,14 +411,14 @@ function canvas_onpointermove(evt) {
 
 			let c = puzzle.next_cell(new_cell, "entry");
 			if(c !== null && c.color_index === new_cell.color_index) {
-				c.exit = "";
-				new_cell.entry = "";
+				c.exit = DIR.none;
+				new_cell.entry = DIR.none;
 			}
 
 			c = puzzle.next_cell(new_cell);
 			if(c !== null && c.color_index === new_cell.color_index) {
-				c.exit = "";
-				new_cell.exit = "";
+				c.exit = DIR.none;
+				new_cell.exit = DIR.none;
 			}
 		}
 
@@ -426,7 +426,7 @@ function canvas_onpointermove(evt) {
 		if(new_cell.is_dot === false && new_cell.color_index === curr_cell.color_index) {
 
 			console.log("joining");
-			if(new_cell.entry !== "") {
+			if(new_cell.entry !== DIR.none) {
 				let t = new_cell.exit;
 				new_cell.exit = new_cell.entry;
 				new_cell.entry = t;
@@ -445,23 +445,23 @@ function canvas_onpointermove(evt) {
 		// normal path
 		// north
 		if(x === curr_cell.x && y === curr_cell.y - 1) {
-			curr_cell.exit = "n";
-			new_cell.entry = "s";
+			curr_cell.exit = DIR.N;
+			new_cell.entry = DIR.S;
 		}
 		// south
 		else if(x === curr_cell.x && y === curr_cell.y + 1) {
-			curr_cell.exit = "s";
-			new_cell.entry = "n";
+			curr_cell.exit = DIR.S;
+			new_cell.entry = DIR.N;
 		}
 		// west
 		else if(x === curr_cell.x - 1 && y === curr_cell.y) {
-			curr_cell.exit = "w";
-			new_cell.entry = "e";
+			curr_cell.exit = DIR.W;
+			new_cell.entry = DIR.E;
 		}
 		// east
 		else if(x === curr_cell.x + 1 && y === curr_cell.y) {
-			curr_cell.exit = "e";
-			new_cell.entry = "w";
+			curr_cell.exit = DIR.E;
+			new_cell.entry = DIR.W;
 		}
 
 		new_cell.color_index = curr_cell.color_index;

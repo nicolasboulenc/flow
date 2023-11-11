@@ -1,5 +1,18 @@
 "use strict";
 
+const DIR = {
+	none: 0,
+	N: 1,
+	W: 2,
+	S: 4,
+	E: 8,
+}
+
+const TYP = {
+	none: 0,
+	dot: 1,
+}
+
 class Flow_Puzzle {
 
 	constructor() {
@@ -31,7 +44,9 @@ class Flow_Puzzle {
 		this.init(config.cols, config.rows);
 		for(let elem of config.elems) {
 			const index = elem.y * this.cols + elem.x;
-			this.grid[index].is_dot = (elem.type === "dot");
+			if(elem.type === "dot") {
+				this.grid[index].type = TYP.dot;
+			}
 			this.grid[index].color_index = elem.color_index;
 		}
 	}
@@ -39,8 +54,8 @@ class Flow_Puzzle {
 	clear() {
 
 		for(let cell of this.grid) {
-			cell.entry = "";
-			cell.exit = "";
+			cell.entry = DIR.none;
+			cell.exit = DIR.none;
 			if(cell.is_dot === false) {
 				cell.color_index = -1;
 			}
@@ -50,17 +65,17 @@ class Flow_Puzzle {
 	next_cell(cell, which_way="exit") {
 		// returns next cell in an existing path
 		const next_inc = {
-			n: { x: +0, y: -1 },
-			e: { x: +1, y: +0 },
-			s: { x: +0, y: +1 },
-			w: { x: -1, y: +0 }
+			1: { x: +0, y: -1 },	// N
+			2: { x: -1, y: +0 },	// W
+			4: { x: +0, y: +1 },	// S
+			8: { x: +1, y: +0 },	// E
 		};
 
 		const dir = cell[which_way];
-		if(dir === "") return null;
+		if(dir === DIR.none) return null;
 
 		const inc = next_inc[dir];
-		const next_cell = this.grid[(cell.y + inc.y)* this.cols + (cell.x + inc.x)];
+		const next_cell = this.grid[(cell.y + inc.y) * this.cols + (cell.x + inc.x)];
 
 		return next_cell;
 	}
@@ -71,7 +86,7 @@ class Flow_Puzzle {
 
 		for(let cell of this.grid) {
 
-			if(cell.is_dot === true && cell.exit !== "") {
+			if(cell.is_dot === true && cell.exit !== DIR.none) {
 
 				let n_cell = this.next_cell(cell, "exit");
 				while(n_cell !== null && n_cell.is_dot === false) {
@@ -106,7 +121,7 @@ class Flow_Puzzle {
 			if(cell.is_dot === true) {
 
 				let which_way = "exit";
-				if(cell.exit === "") {
+				if(cell.exit === DIR.none) {
 					which_way = "entry";
 				}
 
@@ -130,10 +145,11 @@ class Cell {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
-		this.entry = "";	// n, e, s, w
-		this.exit = "";		// n, e, s, w
-		this.type = "";
-		this.is_dot = false;
+		this.entry = 0;
+		this.exit = 0;
+		this.type = 0;
 		this.color_index = -1;
 	}
+	
+	get is_dot() { return this.type === TYP.dot }
 };
