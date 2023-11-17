@@ -1,8 +1,8 @@
 :root {
-    --main-bg-color: #1f2935;
+  --main-bg-color: #1f2935;
   --main-fg-color: #455363;
   --cell-width: clamp(60px, 19vw, 80px);
-  --cell-font: calc(var(--cell-width) * 0.7);
+  --cell-font: calc(var(--cell-width) * 0.5);
   --cell-gap: calc(var(--cell-width) * 0.15);
   --canvas-height: calc(98vh - 2em - (0.5rem * 2) - 2em - 1rem);
 }
@@ -11,6 +11,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 
 html {
@@ -48,6 +49,14 @@ h1 {
   width: 100%;
   top: 0px;
   left: 0px;
+  font-size: calc(var(--cell-font) * 1.2);
+}
+
+#main h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  margin-left: var(--cell-gap);
+  font-size: var(--cell-font);
 }
 
 #main ul {
@@ -64,19 +73,32 @@ h1 {
   justify-content: center;
   align-items: center;
   font-size: var(--cell-font);
+  font-weight: bold;
   width: var(--cell-width);
   height: var(--cell-width);
   border: 1px solid var(--main-fg-color);
+}
+
+#main li.completed {
+  background-image: url("star.svg");
+  background-size: cover;
 }
 
 #game {
   display: none;
 }
 
-#game > .title-bar {
+#game > .header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game > .header > .title-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 #game > .status-bar {

@@ -1,27 +1,26 @@
 "use strict";
 
 
-let puzzle = new Flow_Puzzle();
+let puzzle = new Flow_Puzzle()
 
-let is_drawing = false;
-let curr_cell = null;
-let curr_flows = [];
+let is_drawing = false
+let curr_cell = null
+let curr_flows = []
 
-let puzzle_type = "";
-let puzzle_num = 0;
-let puzzle_label = 0;
+let puzzle_type = ""
+let puzzle_num = 0
 
-let canvas = null;
-let ctx = null;
-let cell_w = 0;
-let cell_h = 0;
-let grid_w = 0;
-let grid_h = 0;
+let canvas = null
+let ctx = null
+let cell_w = 0
+let cell_h = 0
+let grid_w = 0
+let grid_h = 0
 
 const sounds = new Sounds()
 const theme = THEMES[1]
-const prefix = "/flow"	// "" for local "/flow" for github pages
-
+// const prefix = "/flow"	// "" for local "/flow" for github pages
+const prefix = ""	// "" for local "/flow" for github pages
 
 init();
 
@@ -29,58 +28,71 @@ init();
 function init() {
 
 	// setup game
-	document.getElementById("game-reset-button").addEventListener("click", game_reset_onclick);
-	document.getElementById("game-back-button").addEventListener("click", game_back_onclick);
+	document.getElementById("game-reset-button").addEventListener("click", game_reset_onclick)
+	document.getElementById("game-back-button").addEventListener("click", game_back_onclick)
 
-	document.getElementById("you-win-next-button").addEventListener("click", you_win_next_onclick);
-	document.getElementById("you-win-back-button").addEventListener("click", game_back_onclick);
+	document.getElementById("you-win-next-button").addEventListener("click", you_win_next_onclick)
+	document.getElementById("you-win-back-button").addEventListener("click", game_back_onclick)
 
-	canvas = document.getElementById("canvas");
-	ctx = canvas.getContext("2d");
+	canvas = document.getElementById("canvas")
+	ctx = canvas.getContext("2d")
 
-	canvas.addEventListener("pointerdown", canvas_onpointerdown);
-	canvas.addEventListener("pointerup", canvas_onpointerup);
-	canvas.addEventListener("pointermove", canvas_onpointermove);
+	canvas.addEventListener("pointerdown", canvas_onpointerdown)
+	canvas.addEventListener("pointerup", canvas_onpointerup)
+	canvas.addEventListener("pointermove", canvas_onpointermove)
 
 	const obs = new ResizeObserver(entries => {
 		if(entries[0].contentRect.width !== 0 && entries[0].contentRect.height !== 0) {
-			const width = entries[0].contentRect.width;
-			const height = entries[0].contentRect.height;
-			update_size(width, height);
+			const width = entries[0].contentRect.width
+			const height = entries[0].contentRect.height
+			update_size(width, height)
 			// canvas.style.width = `${grid_w}px`
 			// canvas.style.height = `${grid_h}px`
 		}
 	});
-	obs.observe(document.getElementById("canvas-container"));
+	obs.observe(document.getElementById("canvas-container"))
 
 	// init puzzle list
-	let container = document.getElementById("puzzle-list");
-	let i=0;
+	let container = document.getElementById("puzzle-lists")
 	for(let puzzle_type of PUZZLES) {
+
+		const h2 = document.createElement("h2")
+		h2.innerHTML = puzzle_type.type
+		container.append(h2)
+
+		const pl = document.createElement("ul")
+		pl.classList.add("puzzle-list")
+
 		let j=0;
 		for(let puzzle of puzzle_type.puzzles) {
-			const d = document.createElement("li");
-			d.dataset.puzzle_type = puzzle_type.type;
-			d.dataset.puzzle_num = j;
-			d.dataset.puzzle_label = i+1;
-			d.addEventListener("click", puzzle_item_onclick);
+			const li = document.createElement("li")
+			li.dataset.puzzle_type = puzzle_type.type
+			li.dataset.puzzle_num = j
+			// li.dataset.puzzle_label = `${puzzle_type.type} #${j+1}`;
+			li.addEventListener("click", puzzle_item_onclick);
+			const completed = window.localStorage.getItem(`${puzzle_type.type}-${j}`)
+			if(completed === "1") {
+				li.classList.add("completed")
+			}
 
-			const v = document.createElement("div");
-			v.innerHTML = i+1;
-			d.appendChild(v)
+			
+			const div = document.createElement("div");
+			div.innerHTML = j+1
+			li.appendChild(div)
 
-			container.append(d);
-			i++
+			pl.append(li);
 			j++
 		}
-	}
 
-	// add list item to be a multiple of 5
-	let c = 5 - i % 5;
-	for(let i=0; i<c; i++) {
-		const d = document.createElement("li");
-		d.classList.add("v-hidden");
-		container.append(d);
+		// add list item to be a multiple of 5
+		let c = (j % 5 != 0 ? 5 - j % 5 : 0)
+		for(let i=0; i<c; i++) {
+			const li = document.createElement("li")
+			li.classList.add("v-hidden")
+			pl.append(li)
+		}
+
+		container.append(pl)
 	}
 
 	for(let i=0; i<9; i++) {
@@ -91,25 +103,27 @@ function init() {
 
 function update_size(width, height) {
 
-	cell_w = Math.floor(width / puzzle.cols);
-	cell_h = Math.floor(height / puzzle.rows);
+	cell_w = Math.floor(width / puzzle.cols)
+	cell_h = Math.floor(height / puzzle.rows)
 
 	if(cell_w > cell_h) {
-		cell_w = cell_h;
+		cell_w = cell_h
 	}
 	else {
-		cell_h = cell_w;
+		cell_h = cell_w
 	}
 
-	grid_w = cell_w * puzzle.cols;
-	grid_h = cell_h * puzzle.rows;
+	grid_w = cell_w * puzzle.cols
+	grid_h = cell_h * puzzle.rows
 
-	canvas.width = grid_w;
-	canvas.height = grid_h;
+	canvas.width = grid_w
+	canvas.height = grid_h
+
+	const tb = document.querySelector("#game .title-bar")
+	tb.style["width"] = `${grid_w}px`
 
 	window.requestAnimationFrame(draw);
 }
-
 
 function init_game(puzzle_type, puzzle_num) {
 
@@ -122,66 +136,66 @@ function init_game(puzzle_type, puzzle_num) {
 		}
 	}
 
-	is_drawing = false;
-	curr_cell = null;
-	curr_flows = [];
+	is_drawing = false
+	curr_cell = null
+	curr_flows = []
 
-	puzzle.load(puzzles[puzzle_num]);
-	update_size(canvas.width, canvas.height);
+	puzzle.load(puzzles[puzzle_num])
+	update_size(canvas.width, canvas.height)
 }
 
 
 function draw() {
 
-	const cell_half_w = Math.floor(cell_w / 2);
-	const cell_half_h = Math.floor(cell_h / 2);
-	const path_width = Math.round(cell_w * theme.path_ratio) + Math.round(cell_w * theme.path_ratio) % 2;
-	const dot_radius = (Math.round(cell_w * theme.dot_ratio) + Math.round(cell_w * theme.dot_ratio) % 2) / 2;
+	const cell_half_w = Math.floor(cell_w / 2)
+	const cell_half_h = Math.floor(cell_h / 2)
+	const path_width = Math.round(cell_w * theme.path_ratio) + Math.round(cell_w * theme.path_ratio) % 2
+	const dot_radius = (Math.round(cell_w * theme.dot_ratio) + Math.round(cell_w * theme.dot_ratio) % 2) / 2
 
-	const line_half_width = theme.line_width / 2;
-	const PI2 = 2 * Math.PI;
+	const line_half_width = theme.line_width / 2
+	const PI2 = 2 * Math.PI
 
-	ctx.fillStyle = theme.background_color;
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = theme.background_color
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 	// const flows = puzzle.get_flows()
 	for(const flow of curr_flows) {
-		let cell = flow;
+		let cell = flow
 		ctx.fillStyle = theme.colors[flow.color_index] + "88"
 		while(cell !== null) {
 			// draw rect
 			ctx.fillRect(cell.x * cell_w, cell.y * cell_h, cell_w, cell_h)
-			cell = puzzle.next_cell(cell);
+			cell = puzzle.next_cell(cell)
 		}
 	}
 
 	// draw grid
-	ctx.strokeStyle = theme.line_color;
-	ctx.lineWidth = theme.line_width;
-	ctx.lineCap = "square";
-	ctx.lineJoin = "miter";
+	ctx.strokeStyle = theme.line_color
+	ctx.lineWidth = theme.line_width
+	ctx.lineCap = "square"
+	ctx.lineJoin = "miter"
 
-	ctx.strokeRect(0, 0, grid_w, grid_h);
-	ctx.beginPath();
-	ctx.rect(line_half_width, line_half_width, grid_w - theme.line_width, grid_h - theme.line_width);
+	ctx.strokeRect(0, 0, grid_w, grid_h)
+	ctx.beginPath()
+	ctx.rect(line_half_width, line_half_width, grid_w - theme.line_width, grid_h - theme.line_width)
 
 	// horizontal
 	for(let y=1; y<puzzle.rows; y++) {
-		ctx.moveTo(line_half_width				, y * cell_h);
-		ctx.lineTo(grid_w - theme.line_width	, y * cell_h);
+		ctx.moveTo(line_half_width				, y * cell_h)
+		ctx.lineTo(grid_w - theme.line_width	, y * cell_h)
 	}
 
 	// vertical
 	for(let x=1; x<puzzle.cols; x++) {
-		ctx.moveTo(x * cell_w, line_half_width);
-		ctx.lineTo(x * cell_w, grid_h - theme.line_width);
+		ctx.moveTo(x * cell_w, line_half_width)
+		ctx.lineTo(x * cell_w, grid_h - theme.line_width)
 	}
 	ctx.stroke();
 
 	// draw dots and paths
-	ctx.lineWidth = path_width;
-	ctx.lineCap = "round";
-	ctx.lineJoin = "round";
+	ctx.lineWidth = path_width
+	ctx.lineCap = "round"
+	ctx.lineJoin = "round"
 
 	let cell_index = 0;
 	const cell_count = puzzle.grid.length;
@@ -232,16 +246,16 @@ function draw() {
 
 
 function draw_star(x, y, radius1, radius2, npoints) {
-	let angle = Math.PI * 2 / npoints;
-	let halfAngle = angle / 2.0;
+	let angle = Math.PI * 2 / npoints
+	let halfAngle = angle / 2.0
 	
 	for (let a = Math.PI/2; a < Math.PI*2 + Math.PI/2; a += angle) {
-	  let sx = x + Math.cos(a) * radius2;
-	  let sy = y + Math.sin(a) * radius2;
-	  ctx.lineTo(sx, sy);
-	  sx = x + Math.cos(a + halfAngle) * radius1;
-	  sy = y + Math.sin(a + halfAngle) * radius1;
-	  ctx.lineTo(sx, sy);
+	  let sx = x + Math.cos(a) * radius2
+	  let sy = y + Math.sin(a) * radius2
+	  ctx.lineTo(sx, sy)
+	  sx = x + Math.cos(a + halfAngle) * radius1
+	  sy = y + Math.sin(a + halfAngle) * radius1
+	  ctx.lineTo(sx, sy)
 	}
 }
 
@@ -250,52 +264,52 @@ function canvas_onpointerdown(evt) {
 
 	canvas.setPointerCapture(evt.pointerId);
 
-	const b = canvas.getBoundingClientRect();
-	const pointer_x = evt.clientX - b.left;
-	const pointer_y = evt.clientY - b.top;
+	const b = canvas.getBoundingClientRect()
+	const pointer_x = evt.clientX - b.left
+	const pointer_y = evt.clientY - b.top
 
-	const x = Math.floor(pointer_x / cell_w);
-	const y = Math.floor(pointer_y / cell_h);
+	const x = Math.floor(pointer_x / cell_w)
+	const y = Math.floor(pointer_y / cell_h)
 	
-	if(pointer_x < 0 || pointer_x >= grid_w) return;
-	if(pointer_y < 0 || pointer_y >= grid_h) return;
+	if(pointer_x < 0 || pointer_x >= grid_w) return
+	if(pointer_y < 0 || pointer_y >= grid_h) return
 	
-	const i = y * puzzle.cols + x;
-	curr_cell = null;
+	const i = y * puzzle.cols + x
+	curr_cell = null
 
 	// if starting from dot
 	if(puzzle.grid[i].color_index !== -1 && puzzle.grid[i].is_dot === true) {
-		curr_cell = puzzle.grid[i];
-		is_drawing = true;
+		curr_cell = puzzle.grid[i]
+		is_drawing = true
 	}
 	// if continuing existing path
 	else if(puzzle.grid[i].color_index !== -1 && puzzle.grid[i].is_dot === false && puzzle.grid[i].exit === DIR.none) {
-		curr_cell = puzzle.grid[i];
-		is_drawing = true;
+		curr_cell = puzzle.grid[i]
+		is_drawing = true
 	}
 
 	// if click on a dot remove all previous connections to that point
 	if(curr_cell !== null && curr_cell.is_dot === true && (curr_cell.exit !== DIR.none || curr_cell.entry !== DIR.none)) {
 
-		window.requestAnimationFrame(draw);
+		window.requestAnimationFrame(draw)
 
-		let which_way = "exit";
+		let which_way = "exit"
 		if(curr_cell.exit === DIR.none) {
-			which_way = "entry";
+			which_way = "entry"
 		}
 
-		let search_cell = puzzle.next_cell(curr_cell, which_way);
-		curr_cell.entry = DIR.none;
-		curr_cell.exit = DIR.none;
+		let search_cell = puzzle.next_cell(curr_cell, which_way)
+		curr_cell.entry = DIR.none
+		curr_cell.exit = DIR.none
 
 		while(search_cell !== null) {
 			if(search_cell.is_dot === false) {
-				search_cell.color_index = -1;
+				search_cell.color_index = -1
 			}
-			let c = puzzle.next_cell(search_cell, which_way);
-			search_cell.entry = DIR.none;
-			search_cell.exit = DIR.none;
-			search_cell = c;
+			let c = puzzle.next_cell(search_cell, which_way)
+			search_cell.entry = DIR.none
+			search_cell.exit = DIR.none
+			search_cell = c
 		}
 	}
 }
@@ -305,42 +319,43 @@ function canvas_onpointerup(evt) {
 
 	const new_flows = puzzle.get_flows()
 	if(new_flows.length > curr_flows.length) {
-		sounds.play(`${prefix}/sounds/blip-${new_flows.length-1}.wav`, 1);
+		sounds.play(`${prefix}/sounds/blip-${new_flows.length-1}.wav`, 1)
 	}
-	curr_flows = new_flows;
+	curr_flows = new_flows
 	window.requestAnimationFrame(draw)
 
 	if(puzzle.is_completed() === true)  {
-		document.getElementById("you-win").style.display = "flex";
+		document.getElementById("you-win").style.display = "flex"
+		window.localStorage.setItem(`${puzzle_type}-${puzzle_num}`, 1)
 	}
-	is_drawing = false;
+	is_drawing = false
 }
 
 
 function canvas_onpointermove(evt) {
 
-	if(is_drawing === false) return false;
+	if(is_drawing === false) return false
 	
-	const b = canvas.getBoundingClientRect();
-	let pointer_x = evt.clientX - b.left;
-	let pointer_y = evt.clientY - b.top;
+	const b = canvas.getBoundingClientRect()
+	let pointer_x = evt.clientX - b.left
+	let pointer_y = evt.clientY - b.top
 
-	const x = Math.floor(pointer_x / cell_w);
-	const y = Math.floor(pointer_y / cell_h);
+	const x = Math.floor(pointer_x / cell_w)
+	const y = Math.floor(pointer_y / cell_h)
 
-	if(pointer_x < 0 || pointer_x >= grid_w) return;
-	if(pointer_y < 0 || pointer_y >= grid_h) return;
+	if(pointer_x < 0 || pointer_x >= grid_w) return
+	if(pointer_y < 0 || pointer_y >= grid_h) return
 
 	if(curr_cell.x !== x || curr_cell.y !== y) {
 
-		const i = y * puzzle.cols + x;
-		let new_cell = puzzle.grid[i];
+		const i = y * puzzle.cols + x
+		let new_cell = puzzle.grid[i]
 
 		// does not allow to connect one color path with another color dot
 		if(new_cell.is_dot === true && new_cell.color_index !== curr_cell.color_index) {
-			console.log("Wrong color!");
-			is_drawing = false;
-			return;
+			console.log("Wrong color!")
+			is_drawing = false
+			return
 		}
 
 		// backtracking on the same path
@@ -352,21 +367,21 @@ function canvas_onpointermove(evt) {
 		)) {
 			console.log("Back tracking");
 			if(curr_cell.is_dot === false) {
-				curr_cell.color_index = -1;
+				curr_cell.color_index = -1
 			}
-			curr_cell.entry = DIR.none;
-			new_cell.exit = DIR.none;
-			curr_cell = new_cell;
-			window.requestAnimationFrame(draw);
-			return;
+			curr_cell.entry = DIR.none
+			new_cell.exit = DIR.none
+			curr_cell = new_cell
+			window.requestAnimationFrame(draw)
+			return
 		}
 
 		// if same color and not backtracking, does not allow to connect to a cell which already has both (an entry and exit) or (is a dot and exit)
 		if(new_cell.color_index === curr_cell.color_index) {
 			if( (new_cell.entry !== DIR.none && new_cell.exit !== DIR.none) || (new_cell.is_dot === true && new_cell.exit !== DIR.none) ) {
-				console.log("Trying to loop!");
-				is_drawing = false;
-				return;
+				console.log("Trying to loop!")
+				is_drawing = false
+				return
 			}
 		}
 
@@ -377,50 +392,50 @@ function canvas_onpointermove(evt) {
 			// cut out rest of path if not connectd to a dot
 			// doing this one way one should work because the direction always goes from dot > entry > exit
 			// if we get to a dot we'll fix the direction further down
-			let fix_direction = true;
-			let cells = [];
-			let n_cell = puzzle.next_cell(new_cell);
+			let fix_direction = true
+			let cells = []
+			let n_cell = puzzle.next_cell(new_cell)
 			while(n_cell !== null && n_cell.is_dot === false) {
-				cells.push(n_cell);
-				n_cell = puzzle.next_cell(n_cell);
+				cells.push(n_cell)
+				n_cell = puzzle.next_cell(n_cell)
 			}
 
 			if(n_cell === null) {
-				fix_direction = false;
+				fix_direction = false
 				for(let cell of cells) {
-					cell.color_index = -1;
-					cell.entry = DIR.none;
-					cell.exit = DIR.none;
+					cell.color_index = -1
+					cell.entry = DIR.none
+					cell.exit = DIR.none
 				}
 			}
 
 			// fix direction from dots to end otherwise backtracking will break
 			if(fix_direction === true) {
 
-				let t = new_cell.exit;
-				new_cell.exit = new_cell.entry;
-				new_cell.entry = t;
+				let t = new_cell.exit
+				new_cell.exit = new_cell.entry
+				new_cell.entry = t
 
 				// swap entry / exit for the rest of the chain
-				n_cell = puzzle.next_cell(new_cell, "entry");
+				n_cell = puzzle.next_cell(new_cell, "entry")
 				while(n_cell !== null) {
-					let t = n_cell.exit;
-					n_cell.exit = n_cell.entry;
-					n_cell.entry = t;
-					n_cell = puzzle.next_cell(n_cell, "entry");
+					let t = n_cell.exit
+					n_cell.exit = n_cell.entry
+					n_cell.entry = t
+					n_cell = puzzle.next_cell(n_cell, "entry")
 				}
 			}
 
 			let c = puzzle.next_cell(new_cell, "entry");
 			if(c !== null && c.color_index === new_cell.color_index) {
-				c.exit = DIR.none;
-				new_cell.entry = DIR.none;
+				c.exit = DIR.none
+				new_cell.entry = DIR.none
 			}
 
-			c = puzzle.next_cell(new_cell);
+			c = puzzle.next_cell(new_cell)
 			if(c !== null && c.color_index === new_cell.color_index) {
-				c.exit = DIR.none;
-				new_cell.exit = DIR.none;
+				c.exit = DIR.none
+				new_cell.exit = DIR.none
 			}
 		}
 
@@ -505,9 +520,9 @@ function puzzle_item_onclick(evt) {
 
 	puzzle_type = evt.currentTarget.dataset.puzzle_type
 	puzzle_num = parseInt(evt.currentTarget.dataset.puzzle_num)
-	puzzle_label = parseInt(evt.currentTarget.dataset.puzzle_label)
-	const title = document.querySelector("#game .title-bar > h1")
-	title.innerHTML = `Puzzle #${puzzle_label}`
+	puzzle_label = `${puzzle_type} #${puzzle_num+1}`
+	const title = document.querySelector("#game .title-bar h1")
+	title.innerHTML = `Puzzle ${puzzle_label}`
 
 	init_game(puzzle_type, puzzle_num);
 }
@@ -518,6 +533,24 @@ function game_back_onclick(evt) {
 	document.getElementById("you-win").style.display = "none"
 	const game = document.getElementById("game");
 	game.style.display = "none";
+
+
+	// check if more puzzles have been solved
+	for(let puzzle_type of PUZZLES) {
+
+		let j=0;
+		for(let puzzle of puzzle_type.puzzles) {
+
+			const completed = window.localStorage.getItem(`${puzzle_type.type}-${j}`);
+			if(completed === "1") {
+				const li = document.querySelector("#main ")
+				li.classList.add("completed")
+			}
+			j++
+		}
+	}
+
+
 
 	const puzzles = document.getElementById("main");
 	puzzles.style.display = "flex";
@@ -545,12 +578,12 @@ function you_win_next_onclick(evt) {
 		}
 	}
 
-	puzzle_label++
+	puzzle_label = `${puzzle_type} #${puzzle_num+1}`;
 
 	document.getElementById("you-win").style.display = "none"
 
 	const title = document.querySelector("#game .title-bar > h1")
-	title.innerHTML = `Puzzle #${puzzle_label}`
+	title.innerHTML = `Puzzle ${puzzle_label}`
 
 	init_game(puzzle_type, puzzle_num)
 }

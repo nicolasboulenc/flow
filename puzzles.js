@@ -58,13 +58,13 @@ const PUZZLES = [
 			{"rows":9,"cols":9,"elems":[{"x":1,"y":1,"type":"dot","color_index":"4"},{"x":2,"y":1,"type":"dot","color_index":"5"},{"x":3,"y":1,"type":"dot","color_index":"0"},{"x":3,"y":2,"type":"dot","color_index":"5"},{"x":4,"y":2,"type":"dot","color_index":"3"},{"x":6,"y":2,"type":"dot","color_index":"3"},{"x":7,"y":2,"type":"dot","color_index":"0"},{"x":7,"y":3,"type":"dot","color_index":"6"},{"x":1,"y":4,"type":"dot","color_index":"1"},{"x":3,"y":4,"type":"dot","color_index":"1"},{"x":4,"y":4,"type":"dot","color_index":"4"},{"x":0,"y":5,"type":"dot","color_index":"2"},{"x":1,"y":5,"type":"dot","color_index":"6"},{"x":7,"y":5,"type":"dot","color_index":"8"},{"x":8,"y":5,"type":"dot","color_index":"7"},{"x":1,"y":6,"type":"dot","color_index":"7"},{"x":2,"y":6,"type":"dot","color_index":"2"},{"x":1,"y":7,"type":"dot","color_index":"8"}]},
 		]
 	},
-	// {
-	// 	"type":"Rohan",
-	// 	puzzles: [	
-	// 		{"rows":5,"cols":5,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":2,"y":0,"type":"dot","color_index":"0"},{"x":4,"y":0,"type":"dot","color_index":"2"},{"x":0,"y":1,"type":"dot","color_index":"3"},{"x":1,"y":2,"type":"dot","color_index":"3"},{"x":2,"y":2,"type":"dot","color_index":"4"},{"x":0,"y":3,"type":"dot","color_index":"0"},{"x":0,"y":4,"type":"dot","color_index":"5"},{"x":3,"y":4,"type":"dot","color_index":"5"},{"x":4,"y":4,"type":"dot","color_index":"2"}]},
-	// 		{"rows":14,"cols":14,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":1,"y":0,"type":"dot","color_index":"1"},{"x":6,"y":0,"type":"dot","color_index":"5"},{"x":7,"y":0,"type":"dot","color_index":"3"},{"x":7,"y":1,"type":"dot","color_index":"0"},{"x":6,"y":6,"type":"dot","color_index":"0"},{"x":7,"y":6,"type":"dot","color_index":"3"},{"x":8,"y":6,"type":"dot","color_index":"5"},{"x":11,"y":13,"type":"dot","color_index":"4"},{"x":12,"y":13,"type":"dot","color_index":"1"}]},
-	// 		{"rows":3,"cols":3,"elems":[{"x":0,"y":0,"type":"dot","color_index":"0"},{"x":2,"y":0,"type":"dot","color_index":"4"},{"x":1,"y":1,"type":"dot","color_index":"4"},{"x":2,"y":1,"type":"dot","color_index":"0"}]},
-	// 		{"rows":5,"cols":5,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":4,"y":0,"type":"dot","color_index":"4"}]},
-	// 	]
-	// }
+	{
+		"type":"Rohan",
+		puzzles: [	
+			{"rows":5,"cols":5,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":2,"y":0,"type":"dot","color_index":"0"},{"x":4,"y":0,"type":"dot","color_index":"2"},{"x":0,"y":1,"type":"dot","color_index":"3"},{"x":1,"y":2,"type":"dot","color_index":"3"},{"x":2,"y":2,"type":"dot","color_index":"4"},{"x":0,"y":3,"type":"dot","color_index":"0"},{"x":0,"y":4,"type":"dot","color_index":"5"},{"x":3,"y":4,"type":"dot","color_index":"5"},{"x":4,"y":4,"type":"dot","color_index":"2"}]},
+			{"rows":14,"cols":14,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":1,"y":0,"type":"dot","color_index":"1"},{"x":6,"y":0,"type":"dot","color_index":"5"},{"x":7,"y":0,"type":"dot","color_index":"3"},{"x":7,"y":1,"type":"dot","color_index":"0"},{"x":6,"y":6,"type":"dot","color_index":"0"},{"x":7,"y":6,"type":"dot","color_index":"3"},{"x":8,"y":6,"type":"dot","color_index":"5"},{"x":11,"y":13,"type":"dot","color_index":"4"},{"x":12,"y":13,"type":"dot","color_index":"1"}]},
+			{"rows":3,"cols":3,"elems":[{"x":0,"y":0,"type":"dot","color_index":"0"},{"x":2,"y":0,"type":"dot","color_index":"4"},{"x":1,"y":1,"type":"dot","color_index":"4"},{"x":2,"y":1,"type":"dot","color_index":"0"}]},
+			{"rows":5,"cols":5,"elems":[{"x":0,"y":0,"type":"dot","color_index":"4"},{"x":4,"y":0,"type":"dot","color_index":"4"}]},
+		]
+	}
 ];
