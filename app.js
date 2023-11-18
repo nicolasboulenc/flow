@@ -19,8 +19,6 @@ let grid_h = 0
 
 const sounds = new Sounds()
 const theme = THEMES[1]
-// const prefix = "/flow"	// "" for local "/flow" for github pages
-const prefix = ""	// "" for local "/flow" for github pages
 
 init();
 
