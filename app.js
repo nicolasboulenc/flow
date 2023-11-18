@@ -95,7 +95,7 @@ function init() {
 	}
 
 	for(let i=0; i<9; i++) {
-		sounds.load(`${prefix}/sounds/blip-${i}.wav`)
+		sounds.load(`sounds/blip-${i}.wav`)
 	}
 }
 
