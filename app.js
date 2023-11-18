@@ -74,11 +74,10 @@ function init() {
 			if(completed === "1") {
 				li.classList.add("completed")
 			}
-
 			
-			const div = document.createElement("div");
-			div.innerHTML = j+1
-			li.appendChild(div)
+			const span = document.createElement("span");
+			span.innerHTML = j+1
+			li.appendChild(span)
 
 			pl.append(li);
 			j++
@@ -520,9 +519,11 @@ function puzzle_item_onclick(evt) {
 
 	puzzle_type = evt.currentTarget.dataset.puzzle_type
 	puzzle_num = parseInt(evt.currentTarget.dataset.puzzle_num)
-	puzzle_label = `${puzzle_type} #${puzzle_num+1}`
+	const puzzle_label = `${puzzle_type} #${puzzle_num+1}`
 	const title = document.querySelector("#game .title-bar h1")
 	title.innerHTML = `Puzzle ${puzzle_label}`
+
+	document.body.classList.add("game")
 
 	init_game(puzzle_type, puzzle_num);
 }
@@ -531,29 +532,27 @@ function puzzle_item_onclick(evt) {
 function game_back_onclick(evt) {
 
 	document.getElementById("you-win").style.display = "none"
-	const game = document.getElementById("game");
-	game.style.display = "none";
-
+	const game = document.getElementById("game")
+	game.style.display = "none"
 
 	// check if more puzzles have been solved
 	for(let puzzle_type of PUZZLES) {
 
-		let j=0;
+		let j=0
 		for(let puzzle of puzzle_type.puzzles) {
 
 			const completed = window.localStorage.getItem(`${puzzle_type.type}-${j}`);
 			if(completed === "1") {
-				const li = document.querySelector("#main ")
+				const li = document.querySelector(`#main #puzzle-lists [data-puzzle_type="${puzzle_type.type}"][data-puzzle_num="${j}"]`)
 				li.classList.add("completed")
 			}
 			j++
 		}
 	}
 
-
-
-	const puzzles = document.getElementById("main");
-	puzzles.style.display = "flex";
+	document.body.classList.remove("game")
+	const puzzles = document.getElementById("main")
+	puzzles.style.display = "flex"
 }
 
 
@@ -578,7 +577,7 @@ function you_win_next_onclick(evt) {
 		}
 	}
 
-	puzzle_label = `${puzzle_type} #${puzzle_num+1}`;
+	const puzzle_label = `${puzzle_type} #${puzzle_num+1}`
 
 	document.getElementById("you-win").style.display = "none"
 

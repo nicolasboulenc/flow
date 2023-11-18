@@ -21,7 +21,14 @@ html {
 }
 
 body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.game {
   position: fixed;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 h1 {
@@ -68,6 +75,10 @@ h1 {
   max-width: 480px;
 }
 
+#main ul:last-child {
+  margin-bottom: 10vh
+}
+
 #main li {
   display: flex;
   justify-content: center;
@@ -80,8 +91,12 @@ h1 {
 }
 
 #main li.completed {
-  background-image: url("star.svg");
+  background-image: url("images/star.svg");
   background-size: cover;
+}
+
+#main li span {
+  margin-top: calc(var(--cell-font) * 0.3);
 }
 
 #game {
@@ -156,12 +171,40 @@ h1 {
   align-items: center;
 }
 
+.you-win-back-image {
+  background-image: url("images/back2.svg");
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+}
+
 #you-win-next-button {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.you-win-next-image {
+  background-image: url("images/next.svg");
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+}
+
 .v-hidden {
   visibility: hidden;
+}
+
+.back-button {
+  background-image: url("images/back.svg");
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+}
+
+.reset-button {
+  background-image: url("images/reset.svg");
+  background-size: cover;
+  width: 32px;
+  height: 32px;
 }
