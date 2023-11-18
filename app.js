@@ -118,8 +118,12 @@ function update_size(width, height) {
 	canvas.width = grid_w
 	canvas.height = grid_h
 
-	const tb = document.querySelector("#game .title-bar")
+	const tb = document.querySelector("#game > .header > .title-bar")
 	tb.style["width"] = `${grid_w}px`
+
+	const sb = document.querySelector("#game > .header > .status-bar")
+	sb.style["width"] = `${grid_w}px`
+
 
 	window.requestAnimationFrame(draw);
 }
@@ -318,7 +322,7 @@ function canvas_onpointerup(evt) {
 
 	const new_flows = puzzle.get_flows()
 	if(new_flows.length > curr_flows.length) {
-		sounds.play(`${prefix}/sounds/blip-${new_flows.length-1}.wav`, 1)
+		sounds.play(`sounds/blip-${new_flows.length-1}.wav`, 1)
 	}
 	curr_flows = new_flows
 	window.requestAnimationFrame(draw)
@@ -509,7 +513,7 @@ function game_reset_onclick() {
 
 function puzzle_item_onclick(evt) {
 
-	sounds.play(`${prefix}/sounds/blip-3.wav`, 1)
+	sounds.play(`sounds/blip-3.wav`, 1)
 
 	const puzzles = document.getElementById("main");
 	puzzles.style.display = "none";

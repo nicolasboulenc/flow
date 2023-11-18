@@ -96,7 +96,7 @@ h1 {
 }
 
 #main li span {
-  margin-top: calc(var(--cell-font) * 0.3);
+  margin-top: calc(var(--cell-font) * 0.0);
 }
 
 #game {
@@ -107,6 +107,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 #game > .header > .title-bar {
@@ -116,7 +117,7 @@ h1 {
   width: 100%;
 }
 
-#game > .status-bar {
+#game > .header > .status-bar {
   display: flex;
   justify-content: space-around;
   margin-bottom: 1rem;
