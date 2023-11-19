@@ -1,0 +1,176 @@
+:root {
+  --main-bg-color: #1f2935;
+  --main-fg-color: #455363;
+  --cell-width: clamp(60px, 19vw, 80px);
+  --cell-font: calc(var(--cell-width) * 0.5);
+  --cell-gap: calc(var(--cell-width) * 0.15);
+  --canvas-height: calc(98vh - 2em - (0.5rem * 2) - 2em - 1rem);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html {
+  background-color: var(--main-bg-color);
+  color: var(--main-fg-color);
+  font-family: "robotoregular", Helvetica, Arial, sans-serif;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+
+body.game {
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0.5rem;
+}
+
+.container {
+  margin: 0 auto;
+  height: 98vh;
+  width: 98vw;
+  flex-direction: column;
+  max-width: 90vh;
+}
+
+#main {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;		
+}
+
+#main > h1 {
+  /* position: absolute; */
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  font-size: calc(var(--cell-font) * 1.2);
+}
+
+#main h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  margin-left: var(--cell-gap);
+  font-size: var(--cell-font);
+}
+
+#main ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--cell-gap);
+  max-width: 480px;
+}
+
+#main ul:last-child {
+  margin-bottom: 10vh
+}
+
+#main li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--cell-font);
+  font-weight: bold;
+  width: var(--cell-width);
+  height: var(--cell-width);
+  border: 1px solid var(--main-fg-color);
+}
+
+#main li.completed {
+  background-image: url("images/star.svg");
+  background-size: cover;
+}
+
+#main li span {
+  margin-top: calc(var(--cell-font) * 0.0);
+}
+
+/* game all ok */
+#game {
+  display: none;
+}
+
+#game > .title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#game > .status-bar {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+#canvas-container {
+  text-align: center;
+  height: var(--canvas-height);
+}
+
+#canvas {
+  max-width: 100%;
+  max-height: 100%;
+  background-color: var(--main-bg-color);
+  touch-action: none;
+}
+
+/* you win all ok */
+#you-win {
+  display: none;
+  position: relative;
+  top: -50%;
+  margin: 0 auto;
+  border: 1px solid var(--main-fg-color);
+  background-color: var(--main-bg-color);
+}
+
+#you-win > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.button-image {
+  display: inline-block;
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+.back-image {
+  background-image: url("images/back.svg");
+}
+
+.reset-image {
+  background-image: url("images/reset.svg");
+}
+
+.back2-image {
+  background-image: url("images/back2.svg");
+}
+
+.next-image {
+  background-image: url("images/next.svg");
+}
+
+/* do we need this? */
+.v-hidden {
+  visibility: hidden;
+}

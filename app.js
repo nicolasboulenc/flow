@@ -17,6 +17,8 @@ let cell_h = 0
 let grid_w = 0
 let grid_h = 0
 
+let is_draw_queued = false;
+
 const sounds = new Sounds()
 const theme = THEMES[1]
 
@@ -44,8 +46,6 @@ function init() {
 			const width = entries[0].contentRect.width
 			const height = entries[0].contentRect.height
 			update_size(width, height)
-			// canvas.style.width = `${grid_w}px`
-			// canvas.style.height = `${grid_h}px`
 		}
 	});
 	obs.observe(document.getElementById("canvas-container"))
@@ -116,14 +116,13 @@ function update_size(width, height) {
 	canvas.width = grid_w
 	canvas.height = grid_h
 
-	const tb = document.querySelector("#game > .header > .title-bar")
-	tb.style["width"] = `${grid_w}px`
+	// const tb = document.querySelector("#game > .header > .title-bar")
+	// tb.style["width"] = `${grid_w}px`
 
-	const sb = document.querySelector("#game > .header > .status-bar")
-	sb.style["width"] = `${grid_w}px`
+	// const sb = document.querySelector("#game > .header > .status-bar")
+	// sb.style["width"] = `${grid_w}px`
 
-
-	window.requestAnimationFrame(draw);
+	request_draw()
 }
 
 function init_game(puzzle_type, puzzle_num) {
@@ -147,6 +146,8 @@ function init_game(puzzle_type, puzzle_num) {
 
 
 function draw() {
+
+	is_draw_queued = false;
 
 	const cell_half_w = Math.floor(cell_w / 2)
 	const cell_half_h = Math.floor(cell_h / 2)
@@ -292,7 +293,7 @@ function canvas_onpointerdown(evt) {
 	// if click on a dot remove all previous connections to that point
 	if(curr_cell !== null && curr_cell.is_dot === true && (curr_cell.exit !== DIR.none || curr_cell.entry !== DIR.none)) {
 
-		window.requestAnimationFrame(draw)
+		request_draw()
 
 		let which_way = "exit"
 		if(curr_cell.exit === DIR.none) {
@@ -323,10 +324,10 @@ function canvas_onpointerup(evt) {
 		sounds.play(`sounds/blip-${new_flows.length-1}.wav`, 1)
 	}
 	curr_flows = new_flows
-	window.requestAnimationFrame(draw)
+	request_draw()
 
 	if(puzzle.is_completed() === true)  {
-		document.getElementById("you-win").style.display = "flex"
+		document.getElementById("you-win").style.display = "block"
 		window.localStorage.setItem(`${puzzle_type}-${puzzle_num}`, 1)
 	}
 	is_drawing = false
@@ -373,7 +374,7 @@ function canvas_onpointermove(evt) {
 			curr_cell.entry = DIR.none
 			new_cell.exit = DIR.none
 			curr_cell = new_cell
-			window.requestAnimationFrame(draw)
+			request_draw()
 			return
 		}
 
@@ -489,7 +490,7 @@ function canvas_onpointermove(evt) {
 			is_drawing = false;
 		}
 
-		window.requestAnimationFrame(draw);
+		request_draw()
 	}
 }
 
@@ -505,7 +506,7 @@ function game_reset_onclick() {
 	curr_cell = null;
 	curr_flows = [];
 
-	window.requestAnimationFrame(draw);
+	request_draw()
 }
 
 
@@ -587,4 +588,11 @@ function you_win_next_onclick(evt) {
 	title.innerHTML = `Puzzle ${puzzle_label}`
 
 	init_game(puzzle_type, puzzle_num)
+}
+
+
+function request_draw() {
+	if(is_draw_queued === true) return
+	is_draw_queued = true
+	window.requestAnimationFrame(draw)
 }
