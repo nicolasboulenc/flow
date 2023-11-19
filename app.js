@@ -34,6 +34,8 @@ function init() {
 	document.getElementById("you-win-next-button").addEventListener("click", you_win_next_onclick)
 	document.getElementById("you-win-back-button").addEventListener("click", game_back_onclick)
 
+	document.getElementById("reset-button").addEventListener("click", reset_onclick)
+
 	canvas = document.getElementById("canvas")
 	ctx = canvas.getContext("2d")
 
@@ -539,6 +541,16 @@ function game_back_onclick(evt) {
 	const game = document.getElementById("game")
 	game.style.display = "none"
 
+	sync_storage()
+
+	document.body.classList.remove("game")
+	const puzzles = document.getElementById("main")
+	puzzles.style.display = "flex"
+}
+
+
+function sync_storage() {
+
 	// check if more puzzles have been solved
 	for(let puzzle_type of PUZZLES) {
 
@@ -546,17 +558,16 @@ function game_back_onclick(evt) {
 		for(let puzzle of puzzle_type.puzzles) {
 
 			const completed = window.localStorage.getItem(`${puzzle_type.type}-${j}`);
+			const li = document.querySelector(`#puzzle-lists [data-puzzle_type="${puzzle_type.type}"][data-puzzle_num="${j}"]`)
 			if(completed === "1") {
-				const li = document.querySelector(`#main #puzzle-lists [data-puzzle_type="${puzzle_type.type}"][data-puzzle_num="${j}"]`)
 				li.classList.add("completed")
+			}
+			else {
+				li.classList.remove("completed")
 			}
 			j++
 		}
 	}
-
-	document.body.classList.remove("game")
-	const puzzles = document.getElementById("main")
-	puzzles.style.display = "flex"
 }
 
 
@@ -589,6 +600,11 @@ function you_win_next_onclick(evt) {
 	title.innerHTML = `Puzzle ${puzzle_label}`
 
 	init_game(puzzle_type, puzzle_num)
+}
+
+function reset_onclick(evt) {
+	window.localStorage.clear()
+	sync_storage()
 }
 
 
