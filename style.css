@@ -69,10 +69,6 @@ h1 {
   list-style: none;
 }
 
-#main ul:last-child {
-  margin-bottom: 25vh;
-}
-
 #main li {
   display: flex;
   justify-content: center;
@@ -92,6 +88,19 @@ h1 {
   background-image: url("images/star.svg");
   background-size: cover;
 }
+
+#main ul:last-child {
+  margin-bottom: 25vh;
+}
+
+#reset-button {
+  margin-top: -12vh;
+}
+
+#reset-button:hover {
+  text-decoration: underline;
+}
+
 
 /* game all ok */
 #game {
@@ -141,6 +150,14 @@ h1 {
   justify-content: space-between;
 }
 
+.button {
+  cursor: pointer;
+}
+
+.button:hover {
+  text-decoration: underline;
+}
+
 .button-image {
   display: inline-block;
   background-size: cover;
@@ -173,3 +190,4 @@ h1 {
 .reset {
   fill: var(--main-fg-color);
 }
+

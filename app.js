@@ -68,6 +68,7 @@ function init() {
 			li.dataset.puzzle_num = j
 			// li.dataset.puzzle_label = `${puzzle_type.type} #${j+1}`;
 			li.addEventListener("click", puzzle_item_onclick);
+			li.classList.add("button")
 			const completed = window.localStorage.getItem(`${puzzle_type.type}-${j}`)
 			if(completed === "1") {
 				li.classList.add("completed")

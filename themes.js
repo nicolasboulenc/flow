@@ -2,7 +2,7 @@
 
 const THEMES = [
 	{
-		background_color: "#1f2935",
+		background_color: "#1c2632",
 		line_color: "black",
 		line_width: 2,
 		shape: "star",
@@ -21,7 +21,7 @@ const THEMES = [
 		colors: [ "#0c2afe", "#008d00", "#e9e000", "#fa8900", "#fe0000", "#00ffff", "#ff0ac9", "#81007f", "#a52b2a" ]
 	},
 	{
-		background_color: "#1f2935",
+		background_color: "#1c2632",
 		line_color: "gray",
 		line_width: 2,
 		shape: "dot",
