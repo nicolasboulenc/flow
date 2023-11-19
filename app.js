@@ -59,7 +59,7 @@ function init() {
 		container.append(h2)
 
 		const pl = document.createElement("ul")
-		pl.classList.add("puzzle-list")
+		// pl.classList.add("puzzle-list")
 
 		let j=0;
 		for(let puzzle of puzzle_type.puzzles) {
