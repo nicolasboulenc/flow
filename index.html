@@ -13,36 +13,30 @@
 	</div>
 
 	<div id="game" class="container">
-		<div class="header">
-			<div class="title-bar">
-				<div id="game-back-button" class="back-button"></div>
-				<h1></h1>
-				<div id="game-reset-button" class="reset-button"></div>
-			</div>
-			<div class="status-bar">
-				<div>Flows: </div>
-				<div>Coverage: </div>
-			</div>
+		<div class="title-bar">
+			<div id="game-back-button" class="button-image back-image"></div>
+			<h1></h1>
+			<div id="game-reset-button" class="button-image reset-image"></div>
+		</div>
+		<div class="status-bar">
+			<div>Flows: </div>
+			<div>Coverage: </div>
 		</div>
 		<div id="canvas-container">
 			<canvas id="canvas"></canvas>
 		</div>
-	</div>
 
-	<div id="you-win" class="container">
-		<div>
+		<span id="you-win">
 			<h1>Congratulations!</h1>
 			<div>
 				<div id="you-win-back-button">
-					<div class="you-win-back-image"></div>
-					<div>Back</div>
+					<span class="button-image back2-image"></span>Back
 				</div>
 				<div id="you-win-next-button">
-					<div>Next</div>
-					<div class="you-win-next-image"></div>
+					Next<span class="button-image next-image"></span>
 				</div>
 			</div>
-		</div>
+		</span>
 	</div>
 
 	<script src="themes.js"></script>

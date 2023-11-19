@@ -12,8 +12,8 @@ const THEMES = [
 		colors: [ "#0c2afe", "#008d00", "#e9e000", "#fa8900", "#fe0000", "#00ffff", "#ff0ac9", "#81007f", "#a52b2a" ]
 	},
 	{
-		background_color: "#1f2935",
-		line_color: "#455363",
+		background_color: "#1c2632",
+		line_color: "#6c7a8a",
 		line_width: 2,
 		shape: "square",
 		dot_ratio: 0.7,
