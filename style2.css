@@ -4,7 +4,7 @@
   --cell-width: clamp(60px, 19vw, 80px);
   --cell-font: calc(var(--cell-width) * 0.5);
   --cell-gap: calc(var(--cell-width) * 0.15);
-  --canvas-height: calc(98vh - 2em - (0.5rem * 2) - 2em - 1rem);
+  --canvas-height: calc(98vh - 2rem - (0.5rem * 2) - 2rem - 1rem);
 }
 
 * {
@@ -133,7 +133,6 @@ h1 {
 /* you win all ok */
 #you-win {
   display: none;
-  position: relative;
   top: -50%;
   margin: 0 auto;
   border: 1px solid var(--main-fg-color);
